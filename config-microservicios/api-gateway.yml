@@ -1,0 +1,32 @@
+server:
+  port: 9090
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: estudiantes
+              uri: lb://estudiantes-service
+              predicates:
+                - Path=/api/v1/estudiantes/**
+
+            - id: docentes
+              uri: lb://docentes-service
+              predicates:
+                - Path=/api/v1/docentes/**
+
+            - id: asignaturas
+              uri: lb://asignaturas-service
+              predicates:
+                - Path=/api/v1/asignaturas/**
+
+            - id: tutorias
+              uri: lb://tutorias-service
+              predicates:
+                - Path=/api/v1/tutorias/**
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
