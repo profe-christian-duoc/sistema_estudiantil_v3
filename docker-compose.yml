@@ -18,6 +18,9 @@ services:
     container_name: eureka
     ports:
       - "8761:8761"
+    depends_on:
+     mysql-db:
+       condition: service_started
   config-server:
     restart: always
     build:
@@ -30,6 +33,11 @@ services:
       - "8888:8888"
     volumes:
       - ./config-microservicios:/config-microservicios
+    depends_on:
+      mysql-db:
+        condition: service_started
+      eureka:
+        condition: service_started
   estudiantes-service:
     restart: always
     build:
@@ -42,6 +50,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bd_estudiantes
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-db:
+        condition: service_started
+      eureka:
+        condition: service_started
+      config-server:
+        condition: service_started
   docentes-service:
     restart: always
     build:
@@ -54,18 +69,34 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bd_docentes
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-db:
+        condition: service_started
+      eureka:
+        condition: service_started
+      config-server:
+        condition: service_started
   asignaturas-service:
     restart: always
     build:
       context: ./asignaturas-service
       dockerfile: Dockerfile
     container_name: asignaturas
+    ports:
+      - "8085:8085"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bd_asignaturas
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-db:
+        condition: service_started
+      eureka:
+        condition: service_started
+      config-server:
+        condition: service_started
   tutorias-service:
     restart: always
     build:
@@ -78,6 +109,13 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bd_tutorias
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql-db:
+        condition: service_started
+      eureka:
+        condition: service_started
+      config-server:
+        condition: service_started
   api-gateway:
     restart: always
     build:
@@ -89,5 +127,15 @@ services:
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+    depends_on:
+      - eureka
+      - config-server
+      - tutorias-service
+      - asignaturas-service
+      - docentes-service
+      - estudiantes-service
+      - mysql-db
 volumes:
   mysql_data:
+
+
