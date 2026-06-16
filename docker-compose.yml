@@ -29,6 +29,7 @@ services:
     container_name: config-server
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
+      CONFIG_SEARCH_LOCATIONS: file:/config-microservicios
     ports:
       - "8888:8888"
     volumes:
@@ -82,8 +83,6 @@ services:
       context: ./asignaturas-service
       dockerfile: Dockerfile
     container_name: asignaturas
-    ports:
-      - "8085:8085"
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka/
       SPRING_CONFIG_IMPORT: configserver:http://config-server:8888

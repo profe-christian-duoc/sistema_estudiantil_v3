@@ -1,6 +1,5 @@
 server:
   port: 9090
-
 spring:
   cloud:
     gateway:
@@ -10,50 +9,23 @@ spring:
             - id: estudiantes
               uri: lb://estudiantes-service
               predicates:
-                - Path=/api/v1/estudiantes/**, /v3/api-docs/estudiantes
-              filters:
-                - RewritePath=/v3/api-docs/estudiantes, /v3/api-docs
+                - Path=/api/v1/estudiantes/**
 
             - id: docentes
               uri: lb://docentes-service
               predicates:
-                - Path=/api/v1/docentes/**, /v3/api-docs/docentes
-              filters:
-                - RewritePath=/v3/api-docs/docentes, /v3/api-docs
+                - Path=/api/v1/docentes/**
 
             - id: asignaturas
               uri: lb://asignaturas-service
               predicates:
-                - Path=/api/v1/asignaturas/**, /v3/api-docs/asignaturas
-              filters:
-                - RewritePath=/v3/api-docs/asignaturas, /v3/api-docs
+                - Path=/api/v1/asignaturas/**
 
             - id: tutorias
               uri: lb://tutorias-service
               predicates:
-                - Path=/api/v1/tutorias/**, /v3/api-docs/tutorias
-              filters:
-                - RewritePath=/v3/api-docs/tutorias, /v3/api-docs
-
+                - Path=/api/v1/tutorias/**
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE}
-
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
-    urls:
-      - name: Asignaturas Service
-        url: /v3/api-docs/asignaturas
-      - name: Estudiantes Service
-        url: /v3/api-docs/estudiantes
-      - name: Docentes Service
-        url: /v3/api-docs/docentes
-      - name: Tutorias Service
-        url: /v3/api-docs/tutorias
-
-
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
