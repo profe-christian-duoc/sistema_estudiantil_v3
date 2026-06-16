@@ -41,3 +41,26 @@ CREATE DATABASE IF NOT EXISTS bd_asignaturas;
 CREATE DATABASE IF NOT EXISTS bd_tutorias;
 ```
 
+## 🚀 Ejecución en Entorno Híbrido
+
+El sistema está diseñado para funcionar de forma flexible en dos modalidades: **Local (Nativo)** o **Contenerizado (Docker)**, adaptándose a las necesidades de tu entorno de desarrollo.
+
+---
+
+### 1. Modalidad Local (Sin Docker)
+Ideal si deseas ejecutar los microservicios desde tu IDE (IntelliJ, Eclipse, etc.) o consola, utilizando herramientas locales.
+
+* **Requisitos:** Tener activo tu servidor MySQL local (por ejemplo, mediante **XAMPP** o Workbench) y el servidor de Discovery (**Eureka**) ejecutándose en tu máquina.
+* **Base de Datos:** Debes crear de forma manual la base de datos `bd_asignaturas` (y las correspondientes a cada servicio) antes de iniciar las aplicaciones.
+* **Variables de Entorno:** El sistema detectará automáticamente la ausencia de contenedores y utilizará los valores por defecto apuntando a `localhost`.
+
+### 2. Modalidad Contenerizada (Con Docker)
+Ideal para desplegar toda la arquitectura de microservicios e infraestructura con un solo comando, garantizando que todo funcione en un entorno aislado y controlado.
+
+* **Requisitos:** Tener instalado y en ejecución **Docker Desktop**.
+* **Despliegue:** No necesitas crear las bases de datos ni configurar conexiones manualmente; Docker Compose se encarga de todo el ciclo de vida (redes, volúmenes, inicialización de bases de datos y aprovisionamiento del Config Server).
+
+Para construir las imágenes, compilar el código fuente Java y levantar todos los servicios en segundo plano, ejecuta desde la raíz del proyecto:
+
+```bash
+docker compose up --build -d
